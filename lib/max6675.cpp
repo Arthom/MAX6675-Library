@@ -25,11 +25,11 @@ char MAX6675::SPIRead(void) {
 
 	for (int i = 7; i >= 0; i--) {
 		digitalWrite(MAX6675::SCK, LOW);
-		usleep(1 * 1000);
+		usleep(1000); //dont need to multiply by 1
 		if (digitalRead(MAX6675::MISO))
 			d |= (1 << i);
 		digitalWrite(MAX6675::SCK, HIGH);
-		usleep(1 * 1000);
+		usleep(1000); //dont need to multiply by 1
 	}
 
 	return d;
