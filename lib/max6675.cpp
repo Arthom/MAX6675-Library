@@ -4,7 +4,7 @@
 
 #include "max6675.h"
 
-void MAX6675::begin(uint8_t csPin = 0, uint8_t misoPin = 0, uint8_t sckPin = 0) {
+void MAX6675::begin(uint8_t csPin, uint8_t misoPin, uint8_t sckPin) {
 	MAX6675::CS = csPin;
 	MAX6675::MISO = misoPin;
 	MAX6675::SCK = sckPin;
@@ -25,11 +25,13 @@ char MAX6675::SPIRead(void) {
 
 	for (int i = 7; i >= 0; i--) {
 		digitalWrite(MAX6675::SCK, LOW);
-		usleep(1000); //dont need to multiply by 1
+		usleep(1000);
+
 		if (digitalRead(MAX6675::MISO))
 			d |= (1 << i);
+
 		digitalWrite(MAX6675::SCK, HIGH);
-		usleep(1000); //dont need to multiply by 1
+		usleep(1000);
 	}
 
 	return d;
@@ -39,7 +41,7 @@ double MAX6675::convertToCelsius(void) {
 	uint16_t v;
 
 	digitalWrite(MAX6675::CS, LOW);
-	usleep(1 * 1000);
+	usleep(1000);
 
 	v = MAX6675::SPIRead();
 	v <<= 8;
@@ -49,5 +51,6 @@ double MAX6675::convertToCelsius(void) {
 		return -1;
 
 	v >>= 3;
+
 	return v * 0.25;
 }
